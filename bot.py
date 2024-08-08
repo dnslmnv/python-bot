@@ -8,8 +8,8 @@ user_states = {}
 
 # Create a ReplyKeyboardMarkup with more descriptive button labels
 reply_keyboard = [
-    [KeyboardButton('Обратная связь🤖'),
-    KeyboardButton('О Приложении')]
+    [[KeyboardButton('Обратная связь🤖'),
+    KeyboardButton('О Приложении')] [KeyboardButton('Инструкция🙏')]]
 ]
 reply_markup = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True)
 
@@ -27,6 +27,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         'Мы не отслеживаем вашу геопозицию!\n\nЗапрос отправляется для того чтоб корректно отобразить карту и показать посты ДПС рядом с вами!',
         reply_markup=inline_markup
     )
+     # Отправляем видео
+    video_path = 'BOT.mp4'  # Замените на URL вашего видео или используйте file_id, если оно загружено
+    await update.message.reply_video(video=open(video_path, 'rb'))
     # Send the reply keyboard with commands
     await update.message.reply_text(
         'Вы можете использовать следующие команды:',
@@ -34,14 +37,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     )
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text(
-        'Доступные команды:\n'
-        'Start - Начать работу с ботом\n'
-        'Help - Получить помощь\n'
-        'Mini App - Информация о Mini Apps\n'
-        'Feedback - Отправить отзыв владельцу бота',
-        reply_markup=reply_markup
-    )
+    video_path = 'BOT.mp4'
+    await update.message.reply_video(video=open(video_path, 'rb'))
 
 async def miniapp_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text('Сейчас мы находимся в стадии бета-тестирования!😎\n\n✔✔-- В Скором времени --✔✔\n\n- Построение маршрутов мимо постов🚔\n- Обновленные карты🗺\n- Предупреждение о постах на пути🌟', reply_markup=reply_markup)
@@ -70,7 +67,7 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
         user_states[user_id] = None
     else:
         # Map the descriptive text to command handlers
-        if text == 'Помощь🙏':
+        if text == 'Инструкция🙏':
             await help_command(update, context)
         elif text == 'О Приложении':
             await miniapp_command(update, context)
